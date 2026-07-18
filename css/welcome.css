@@ -1,0 +1,101 @@
+  *{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+
+
+body {
+    height: 100vh;
+    /* display: flex; */
+    background: linear-gradient(135deg, #240669, #1a042c);
+}
+ 
+/* ===== BACKGROUND CIRCLES ===== */
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6e0d0d, #240669);
+  opacity: 0.8;
+  z-index: 0;
+}
+
+.circle-top {
+  width: 300px;
+  height: 300px;
+  top: 100px;
+  right: 20px;
+}
+
+.circle-bottom {
+  width: 200px;
+  height: 200px;
+  bottom: -40px;
+  right: 200px;
+}
+.container{
+    font-size: larger;
+    font-weight: bolder;
+    justify-content: left;
+    align-items: flex-start;
+    width: 250vh;
+    margin-top: 100px;
+    margin-left: 100px; 
+    max-height: 100px;
+    color: rgb(138, 138, 138);
+}
+
+.buttons{
+    margin-top: 100px;
+    margin-left: 75px;
+    font-size: larger;
+    width:max-content;
+    max-height:max-content ;
+    padding-top: -50px;
+    background: transparent;
+    color: rgb(168, 160, 160);
+    /* position: absolute; */
+}
+
+
+.all{
+   
+    margin-top: 60px; 
+    width: 450px;
+    margin-right: -50px; 
+}
+ .right-robo{ 
+    margin: 100px 0 0 70px;
+    width: 400px;
+    height: 400px;
+    right: 400px;
+    top:30px;
+    position: absolute;
+}
+
+
+.Projects{
+    color:blue;
+    background-color: brown;
+    max-width: 500px;
+    max-height: 100px;
+    margin: 70px;
+}
+
+.logo1{
+     max-width: 100px;
+    max-height: 50px;
+    background-color: rgb(255, 0, 0);
+    margin-left:-250px;
+}
+
+.projects-content{
+    background: red;
+    margin:250px;
+    width: 1000px;
+    height: 200px;
+}  

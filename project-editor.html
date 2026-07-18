@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tecno Brain Editor</title>
+    <base target="_blank">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover-min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/camanjs/4.1.2/caman.full.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+
+    <script src="https://scaleflex.cloudimg.io/v7/plugins/filerobot-image-editor/latest/filerobot-image-editor.min.js"></script>
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/dist/bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/loader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;700&family=Roboto:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <div class="brand">YOUSSEF RAMY GROUP</div>
+            <div class="project-name" contenteditable>First Experiment</div>
+        </div>
+        <div class="top-bar-right">
+            <button class="btn" onclick="editor.undo()"><i class="fas fa-undo"></i> Undo</button>
+            <button class="btn" onclick="editor.redo()"><i class="fas fa-redo"></i> Redo</button>
+            <button class="btn" onclick="editor.saveProject()"><i class="fas fa-save"></i> Save</button>
+            <button class="btn" onclick="editor.previewProject()"><i class="fas fa-eye"></i> Preview</button>
+            <button class="btn" onclick="editor.exportTransparentPNG()" style="background:#10b981; color:white; border:none; padding:10px 16px; border-radius:8px; font-weight:bold; cursor:pointer; display:flex; align-items:center; gap:8px;">
+                <i class="fas fa-file-download"></i> Export Transparent PNG
+            </button>
+            <button class="btn btn-primary" onclick="editor.publishProject()"><i class="fas fa-cloud-upload-alt"></i> Publish</button>
+        </div>
+    </div>
+    <div class="main-layout">
+        <div class="left-sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Explorer</div>
+                <div class="nav-item active" data-tab="home" onclick="editor.switchExplorerTab('home', this)">
+                    <i class="fas fa-home"></i> Home
+                </div>
+                <div class="nav-item" data-tab="pages" onclick="editor.switchExplorerTab('pages', this)">
+                    <i class="fas fa-file-alt"></i> Pages
+                </div>
+                
+                <div class="nav-item" data-tab="layers" onclick="editor.switchExplorerTab('layers', this)">
+                    <i class="fas fa-layer-group"></i> Layers
+                </div>
+                <div class="nav-item" data-tab="assets" onclick="editor.switchExplorerTab('assets', this)">
+                    <i class="fas fa-images"></i> Assets
+                </div>
+                <div class="nav-item" onclick="editor.switchExplorerTab('brandkit', this)">
+                    <i class="fas fa-briefcase"></i> Brand Kit
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('buttons-library', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-th-large" style="color: #f59e0b; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">Buttons Library</span>
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('video-studio', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-video" style="color: #ec4899; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">Video Studio (Pro)</span>
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('picsart-pro', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-magic" style="color: #f43f5e; width: 18px; text-shadow: 0 0 8px #f43f5e;"></i>
+                    <span style="font-size: 13px; font-weight: bold; color: #fff;">Tecno Pro photo editor</span>
+                    <span style="font-size: 8px; background: linear-gradient(45deg, #f43f5e, #a855f7); color: white; padding: 2px 5px; border-radius: 4px; margin-left: auto; font-weight: 900;">FREE</span>
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('graphics-cleaner', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-broom" style="color: #38bdf8; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">Graphics Cleaner</span>
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('3d-equipment', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-cube" style="color: #fb923c; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">3D Equipment</span>
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('animation-tools', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-running" style="color: #a855f7; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">Animation Suite</span>
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('sheets-equipment', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-table" style="color: #f43f5e; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">Sheets & Tables</span>
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('premium-templates', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-layer-group" style="color: #3b82f6; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">Premium Templates</span>
+                </div>
+
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('premium-assets', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s; margin-bottom: 15px;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-boxes" style="color: #10b981; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">Premium Assets</span>
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('logo-studio', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-feather" style="color: #38bdf8; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">Logo Studio</span>
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('charts-data', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-chart-line" style="color: #22c55e; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">Charts & Data</span>
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('qr-generator', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-qrcode" style="color: #f59e0b; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">QR Generator</span>
+                </div>
+                <div class="sidebar-item" onclick="editor.switchExplorerTab('tools', this)" style="padding: 10px 16px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#1e1e2e'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-tools" style="color: #8b5cf6; width: 18px;"></i>
+                    <span style="font-size: 13px; font-weight: 500;">Library Tools</span>
+                </div>
+            
+            </div>
+            <div id="dynamicExplorerPanel" style="display: none; background: #18181b; border-right: 1px solid #2e2e3e; padding: 15px; height: 100%;"></div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Code</div>
+                <div class="nav-item" onclick="editor.openLanguageIDE('python')">
+                    <i class="fab fa-python"></i> Python
+                </div>
+                <div class="nav-item" onclick="editor.openLanguageIDE('java')">
+                    <i class="fab fa-java"></i> Java
+                </div>
+                <div class="nav-item" onclick="editor.openLanguageIDE('javascript')">
+                    <i class="fab fa-js"></i> JavaScript
+                </div>
+                <div class="nav-item" onclick="editor.openLanguageIDE('html')">
+                    <i class="fab fa-html5"></i> HTML
+                </div>
+                <div class="nav-item" onclick="editor.openLanguageIDE('css')">
+                    <i class="fab fa-css3-alt"></i> CSS
+                </div>
+               
+            </div>
+        </div>
+        <div class="components-panel" id="componentsPanel"></div>
+        <div class="canvas-area" id="canvasArea">
+            <div class="canvas-container" id="canvas">
+                <!-- مساحة العمل الكبيرة (الـ Workspace) -->
+                <div id="workspace" class="workspace" ondragover="event.preventDefault()" ondrop="editor.handleAssetWorkspaceDrop(event)">
+                    <!-- الصفحة الأولى الافتراضية اللي بتفتح أول ما تشغل الموقع -->
+                    <div id="page1" class="design-screen" style="display: block; width: 100%; height: 100%; min-height: 100%;">
+                        <p style="padding: 20px; color: #888;"></p>
+                        <!-- هنا بيكون عناصر التصميم الافتراضية -->
+                    </div>
+                </div>
+                <div class="canvas-placeholder" id="placeholder">
+                    <i class="fas fa-plus-circle"></i>
+                    <p>Click components or drag them here to start building</p>
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="panel-tabs">
+                <div class="panel-tab active" onclick="editor.switchPanel('properties', this)">Properties</div>
+                <div class="panel-tab" onclick="editor.switchPanel('layers', this)">Layers</div>
+                <div class="panel-tab" onclick="editor.switchPanel('pro', this)">Layers & Filters Pro</div>
+            </div>
+            <div class="panel-content" id="panelContent">
+                <div class="empty-state">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <h3>No Element Selected</h3>
+                    <p>Select an element on the canvas to edit its properties</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="code-ide-container" class="ide-container hidden">
+        <div class="ide-sidebar">
+            <div class="sidebar-title">
+                <span>FILES</span>
+                <button onclick="editor.createNewFileInIDE()"><i class="fas fa-file-plus"></i> +</button>
+            </div>
+            <div id="ide-files-list" class="files-list"></div>
+        </div>
+
+        <div class="ide-main-area">
+            <div class="ide-editor-header">
+                <span id="current-open-file-name">main.py</span>
+                <div style="display:flex; gap:8px;">
+                    <button class="toolbar-btn" onclick="editor.openDesignWorkspace()">
+                        <i class="fas fa-arrow-left"></i> Back to Designer
+                    </button>
+                    <button class="btn-run-code" onclick="editor.runCurrentCode()">
+                        <i class="fas fa-play"></i> Run Code
+                    </button>
+                </div>
+            </div>
+
+            <div id="monaco-editor-container" style="width:100%; height:60%; background:#1e1e1e;"></div>
+
+            <div class="ide-bottom-panel">
+                <div class="bottom-tabs">
+                    <div id="tab-btn-console" class="bottom-tab active" onclick="editor.switchIDETab('console')">Console Output</div>
+                    <div id="tab-btn-preview" class="bottom-tab" onclick="editor.switchIDETab('preview')">Live Web Preview</div>
+                    <div id="tab-btn-packages" class="bottom-tab" onclick="editor.switchIDETab('packages')">Import Libraries</div>
+                </div>
+
+                <div id="ide-console" class="ide-tab-content">
+                    <pre id="console-output">Click "Run Code" to see output...</pre>
+                </div>
+
+                <div id="ide-preview" class="ide-tab-content hidden" style="width: 100%; height: 100%;">
+                    <iframe id="live-preview-iframe" style="width: 100%; height: 250px; background: white; border: none; border-radius: 4px;"></iframe>
+                </div>
+
+                <div id="ide-packages" class="ide-tab-content hidden">
+                    <div class="package-installer">
+                        <input type="text" id="package-name-input" placeholder="e.g., requests, numpy, pandas...">
+                        <button onclick="editor.installLibrary()">Install Package</button>
+                    </div>
+                    <ul id="installed-libraries-list">
+                        <li><i class="fas fa-check-circle" style="color:green;"></i> built-in libraries available</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="codeModal">
+        <div class="code-editor-modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="modal-title-icon" id="modalIcon"><i class="fas fa-code"></i></div>
+                    <div>
+                        <h3 id="modalTitle">Code Editor</h3>
+                        <span id="modalSubtitle">Edit component code</span>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="editor.closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="editor-sidebar">
+                    <div class="editor-tab active" data-tab="code" onclick="editor.switchEditorTab('code', this)">
+                        <i class="fas fa-code"></i> Code
+                    </div>
+                    <div class="editor-tab" data-tab="preview" onclick="editor.switchEditorTab('preview', this)">
+                        <i class="fas fa-eye"></i> Preview
+                    </div>
+                    <div class="editor-tab" data-tab="console" onclick="editor.switchEditorTab('console', this)">
+                        <i class="fas fa-terminal"></i> Console
+                    </div>
+                    <div class="library-section">
+                        <div class="library-section-title">Snippets</div>
+                        <div class="editor-tab" onclick="editor.insertSnippet('heading')"><i class="fas fa-heading"></i> Heading</div>
+                        <div class="editor-tab" onclick="editor.insertSnippet('button')"><i class="fas fa-mouse-pointer"></i> Button</div>
+                        <div class="editor-tab" onclick="editor.insertSnippet('animation')"><i class="fas fa-magic"></i> Animation</div>
+                        <div class="editor-tab" onclick="editor.insertSnippet('fetch')"><i class="fas fa-server"></i> Fetch API</div>
+                        <div class="editor-tab" onclick="editor.insertSnippet('form')"><i class="fas fa-envelope"></i> Form</div>
+                    </div>
+                    <div class="library-section" id="librarySection">
+                        <div class="library-section-title">Libraries</div>
+                        <div class="library-item" onclick="editor.importLibrary('numpy')"><i class="fas fa-cube"></i> numpy</div>
+                        <div class="library-item" onclick="editor.importLibrary('pandas')"><i class="fas fa-table"></i> pandas</div>
+                        <div class="library-item" onclick="editor.importLibrary('matplotlib')"><i class="fas fa-chart-line"></i> matplotlib</div>
+                        <div class="library-item" onclick="editor.importLibrary('react')"><i class="fab fa-react"></i> React</div>
+                        <div class="library-item" onclick="editor.importLibrary('jquery')"><i class="fas fa-dollar-sign"></i> jQuery</div>
+                        <div class="library-item" onclick="editor.importLibrary('bootstrap')"><i class="fab fa-bootstrap"></i> Bootstrap</div>
+                        <div class="library-item" onclick="editor.importLibrary('tailwind')"><i class="fas fa-wind"></i> Tailwind</div>
+                        <div class="library-item" onclick="editor.importLibrary('fontawesome')"><i class="fas fa-font"></i> Font Awesome</div>
+                    </div>
+                </div>
+                <div class="editor-main" id="editorMain">
+                    <div class="editor-toolbar">
+                        <button class="toolbar-btn" onclick="editor.formatCode()"><i class="fas fa-align-left"></i> Format</button>
+                        <button class="toolbar-btn" onclick="editor.copyCode()"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="toolbar-btn" onclick="editor.clearCode()"><i class="fas fa-trash"></i> Clear</button>
+                        <div style="flex:1"></div>
+                        <button class="toolbar-btn" style="color: var(--accent-green);" onclick="editor.runCode()"><i class="fas fa-play"></i> Run</button>
+                    </div>
+                    <textarea class="editor-textarea" id="codeTextarea" spellcheck="false" placeholder="// Write your code here..."></textarea>
+                </div>
+                <div class="editor-preview" id="editorPreview" style="display:none;">
+                    <div id="previewContent"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-status" id="modalStatus">Ready</div>
+                <div class="modal-actions">
+                    <button class="btn" onclick="editor.closeModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="editor.saveCode()"><i class="fas fa-check"></i> Apply Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script src="js/libs-init.js"></script>
+    <script src="js/editor.js"></script>
+    <script>
+        function saveProject() {
+            if (window.editor && typeof window.editor.saveProject === 'function') {
+                window.editor.saveProject();
+            }
+        }
+
+        function previewProject() {
+            if (window.editor && typeof window.editor.previewProject === 'function') {
+                window.editor.previewProject();
+            }
+        }
+
+        function publishProject() {
+            if (window.editor && typeof window.editor.publishProject === 'function') {
+                window.editor.publishProject();
+            }
+        }
+    </script>
+</body>
+</html>

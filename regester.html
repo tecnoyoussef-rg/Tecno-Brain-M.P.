@@ -1,0 +1,267 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/regester.css">
+    <title>Tecno Brain</title>
+     <style>
+        body {
+            background-image: url('LnpotzmK copy.jpg'),linear-gradient(135deg, rgb(4, 4, 77), rgb(116, 2, 116));
+             background-repeat: no-repeat;
+           background-attachment: fixed;
+            background-size: contain;
+             
+            background-position: center;
+        }
+    </style>
+    <script type="module" src="js/regester.js" defer></script>
+</head>
+<body>
+    
+<div class="login-box">
+
+    <form id="loginForm">
+    <h1>Regester</h1>
+<div class="input-box">
+    <input   type="email"
+    id="email" placeholder="Email" required>
+    <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24"  
+fill="currentColor" viewBox="0 0 24 24" >
+<!--Boxicons v3.0.8 https://boxicons.com | License  https://docs.boxicons.com/free-->
+<!--<path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5m0-8c1.65 0 3 1.35 3 3s-1.35 3-3 3-3-1.35-3-3 1.35-3 3-3M4 22h16c.55 0 1-.45 1-1v-1c0-3.86-3.14-7-7-7h-4c-3.86 0-7 3.14-7 7v1c0 .55.45 1 1 1m6-7h4c2.76 0 5 2.24 5 5H5c0-2.76 2.24-5 5-5"></path>
+</svg>
+</div>
+<div class="input-box">
+    <input type="password" id="password" placeholder="password" required>
+<svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24"  
+fill="currentColor" viewBox="0 0 24 24" -->
+<!--Boxicons v3.0.8 https://boxicons.com | License  https://docs.boxicons.com/free-->
+<!--<path d="M6 22h12c1.1 0 2-.9 2-2v-9c0-1.1-.9-2-2-2h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v2H6c-1.1 0-2 .9-2 2v9c0 1.1.9 2 2 2M9 7c0-1.65 1.35-3 3-3s3 1.35 3 3v2H9zm-3 4h12v9H6z"></path>
+</svg> 
+
+ <button type="submit" id="loginBtn">Next</button>
+</form>
+
+<script src="login.js"></script>
+      
+</div>
+
+
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth System - Login & Register</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/regester.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<base target="_blank">
+</head>
+<body>
+    <!-- Background Shapes -->
+    <div class="bg-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Auth Container -->
+    <div class="container" id="authContainer">
+        <!-- Left Panel -->
+        <div class="panel-left" id="panelLeft">
+            <div class="panel-icon"><i class="fas fa-user-shield"></i></div>
+            <h2 id="panelTitle">Welcome Back!</h2>
+            <p id="panelText">To keep connected with us please login with your personal info</p>
+            <button class="panel-btn" id="panelBtn" onclick="toggleForm()"> Sign In</button>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="panel-right">
+            <!-- Login Form -->
+            <div class="form-container active" id="loginForm">
+                <div class="form-header">
+                    <h1>Sign In</h1>
+                    <p>Enter your credentials to access your account</p>
+                </div>
+
+                <div class="social-login">
+                    <button class="social-btn google" onclick="signInWithGoogle()" title="Sign in with Google">
+                        <i class="fab fa-google"></i>
+                    </button>
+                    <button class="social-btn github" onclick="signInWithGithub()" title="Sign in with GitHub">
+                        <i class="fab fa-github"></i>
+                    </button>
+                </div>
+
+                <div class="divider"><span>or use your email</span></div>
+
+                <form onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <input type="email" id="loginEmail" placeholder="Email Address" required>
+                        <i class="fas fa-envelope"></i>
+                        <div class="error-message" id="loginEmailError"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                        <i class="fas fa-lock"></i>
+                        <div class="error-message" id="loginPasswordError"></div>
+                    </div>
+
+                    <div class="options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-password" onclick="handleForgotPassword(event)">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="loginBtn">Sign In</button>
+                </form>
+
+                <div class="switch-form">
+                    Don't have an account? <a onclick="toggleForm()">Sign Up</a>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div class="form-container hidden" id="registerForm">
+                <div class="form-header">
+                    <h1>Create Account</h1>
+                    <p>Start your journey with us today</p>
+                </div>
+
+                <div class="social-login">
+                    <button class="social-btn google" onclick="signInWithGoogle()" title="Sign up with Google">
+                        <i class="fab fa-google"></i>
+                    </button>
+                    <button class="social-btn github" onclick="signInWithGithub()" title="Sign up with GitHub">
+                        <i class="fab fa-github"></i>
+                    </button>
+                </div>
+
+                <div class="divider"><span>or use your email</span></div>
+
+                <form onsubmit="handleRegister(event)">
+                    <div class="input-group">
+                        <input type="text" id="registerName" placeholder="Full Name" required>
+                        <i class="fas fa-user"></i>
+                        <div class="error-message" id="registerNameError"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="email" id="registerEmail" placeholder="Email Address" required>
+                        <i class="fas fa-envelope"></i>
+                        <div class="error-message" id="registerEmailError"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="registerPassword" placeholder="Password" required minlength="6">
+                        <i class="fas fa-lock"></i>
+                        <div class="error-message" id="registerPasswordError"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="registerConfirmPassword" placeholder="Confirm Password" required>
+                        <i class="fas fa-check-circle"></i>
+                        <div class="error-message" id="registerConfirmError"></div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="registerBtn">Sign Up</button>
+                </form>
+
+                <div class="switch-form">
+                    Already have an account? <a onclick="toggleForm()">Sign In</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-chart-line"></i> Dashboard</h1>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-details">
+                    <h3 id="userName">User Name</h3>
+                    <p id="userEmail">user@email.com</p>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <h3 id="totalUsers">0</h3>
+                <p>Total Users</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-calendar-check"></i>
+                <h3 id="joinDate">-</h3>
+                <p>Member Since</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Active</h3>
+                <p>Account Status</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">
+            <i class="fas fa-list"></i>
+            Registered Users
+        </h2>
+        <div class="table-wrapper">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Joined</th>
+                        <th>Provider</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>

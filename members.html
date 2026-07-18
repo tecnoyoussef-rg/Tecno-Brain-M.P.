@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/members.css">
+    <title>Tecno Brain</title>
+<link rel="stylesheet" href="css/header.css">
+</head>
+<body>
+
+
+    <header class="header">
+        <img src="photos/eNJaeIzL.png" alt="Tecno Brain Logo" class="logo">
+        <a href="welcome_psge.html">Home</a>
+        <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+    </header>
+
+    <button id="newProjectBtn">
+    + New Project
+</button>
+
+<div id="projectsList"></div>
+
+<div id="projectModal" class="modal">
+
+    <div class="modal-content">
+
+        <h2>Create Project</h2>
+
+        <input
+            type="text"
+            id="projectName"
+            placeholder="Project Name">
+
+        <textarea
+            id="projectDescription"
+            placeholder="Project Description">
+        </textarea>
+
+        <input
+            type="date"
+            id="projectDeadline">
+
+        <button id="createProjectBtn">
+
+            Create Project
+
+        </button>
+
+    </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/members-auth.js"></script>
+<script src="js/members.js"></script>
+<script type="module" src="js/editor.js"></script>
+
+<footer>
+    <div>
+        <div>
+            <h2 id="contact">Contact us</h2>
+            <p>Phone No./ +201130494602</p>
+            <p>Email: yoskill.youssefr.g@gmail.com</p>
+            <p class="copy">© 2026 Tecno Brain. All rights reserved.</p>
+        </div>
+        <div>
+            <h2 id="about">About</h2>
+            <p>Tecno Brain is a leading technology company that specializes in innovative solutions for businesses and individuals.<br> Our mission is to empower our clients with cutting-edge technology and exceptional service.</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

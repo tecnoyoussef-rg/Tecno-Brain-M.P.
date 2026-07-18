@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details</title>
+    <link rel="stylesheet" href="css/header.css">
+    <style>
+        :root {
+            --bg: #f4f7ff;
+            --panel: #ffffff;
+            --panel-soft: #eef2ff;
+            --text: #111827;
+            --muted: #64748b;
+            --accent: #6d28d9;
+            --accent-2: #2563eb;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f8fbff 0%, #eef2ff 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 32px auto 48px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+            color: #fff;
+            padding: 32px 34px;
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 2rem;
+        }
+
+        .hero p {
+            margin: 0;
+            opacity: 0.95;
+            font-size: 1rem;
+        }
+
+        .content {
+            padding: 28px 34px 34px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.16);
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            margin-top: 10px;
+        }
+
+        .project-meta {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin: 24px 0 28px;
+        }
+
+        .info-box {
+            background: var(--panel-soft);
+            border: 1px solid #e5e7eb;
+            padding: 18px;
+            border-radius: 16px;
+        }
+
+        .info-box strong {
+            display: block;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .project-description {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            color: #334155;
+            background: #fafcff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .back-button, .primary-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.85rem 1.2rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .back-button {
+            background: #fff;
+            color: var(--accent);
+            border: 1px solid #d8d5ff;
+        }
+
+        .primary-action {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+            color: #fff;
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.2);
+        }
+
+        .back-button:hover, .primary-action:hover {
+            transform: translateY(-2px);
+        }
+
+        footer {
+            padding: 24px 20px 32px;
+            background: #0f172a;
+            color: #cbd5e1;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero { padding: 24px 20px; }
+            .content { padding: 20px; }
+            .project-meta { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="photos/eNJaeIzL.png" alt="Tecno Brain Logo" class="logo">
+        <nav>
+            <a href="welcome_psge.html" style="color:#fff; text-decoration:none; margin-right:1rem;">Home</a>
+            <a href="visitor.html" style="color:#fff; text-decoration:none;">Projects</a>
+        </nav>
+    </header>
+    <main>
+        <section class="card">
+            <div class="hero">
+                <h1 id="projectName">Project Name</h1>
+                <p>View the full project details and timeline in one place.</p>
+                <div class="status-pill" id="projectStatus">Status: <strong></strong></div>
+            </div>
+            <div class="content">
+                <div class="project-meta">
+                    <div class="info-box">
+                        <strong>Started</strong>
+                        <span id="projectStart">-</span>
+                    </div>
+                    <div class="info-box">
+                        <strong>Deadline</strong>
+                        <span id="projectDeadline">-</span>
+                    </div>
+                </div>
+                <section>
+                    <h2>Description</h2>
+                    <p id="projectDescription" class="project-description"></p>
+                </section>
+                <div class="actions">
+                    <a href="visitor.html" class="back-button">← Back to Projects</a>
+                    <a href="welcome_psge.html" class="primary-action">Go to Home</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>© 2026 Tecno Brain. All rights reserved.</p>
+    </footer>
+    <script>
+        const selectedProjectId = localStorage.getItem('selectedProject');
+        const projects = JSON.parse(localStorage.getItem('projects') || '[]');
+        const project = projects.find(p => String(p.id) === String(selectedProjectId));
+
+        if (!project) {
+            document.getElementById('projectName').textContent = 'Project not found';
+            document.getElementById('projectStatus').textContent = '';
+            document.getElementById('projectStart').textContent = '-';
+            document.getElementById('projectDeadline').textContent = '-';
+            document.getElementById('projectDescription').textContent = 'The selected project could not be loaded. Please return to the projects list and try again.';
+        } else {
+            document.getElementById('projectName').textContent = project.name || 'Untitled Project';
+            document.getElementById('projectStatus').innerHTML = 'Status: <strong>' + (project.status || 'unknown') + '</strong>';
+            document.getElementById('projectStart').textContent = project.startDate || 'Unknown';
+            document.getElementById('projectDeadline').textContent = project.deadline || 'Not set';
+            document.getElementById('projectDescription').textContent = project.description || 'No description provided.';
+        }
+    </script>
+</body>
+</html>
