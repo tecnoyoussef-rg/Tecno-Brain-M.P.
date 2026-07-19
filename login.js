@@ -189,17 +189,25 @@ function toggleForm() {
     }
 }
 
+async function completeSocialSignIn(result, providerName) {
+    await saveUserToFirestore(result.user, result.user.displayName || `${providerName} User`, providerName.toLowerCase());
+    showToast(`Signed in with ${providerName}!`, 'success');
+    redirectToMembers();
+}
+
 async function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     setLoading('loginBtn', true);
     try {
         const result = await auth.signInWithPopup(provider);
-        await saveUserToFirestore(result.user, result.user.displayName || 'Google User', 'google');
-        showToast('Signed in with Google!', 'success');
-        redirectToMembers();
+        await completeSocialSignIn(result, 'Google');
     } catch (error) {
         console.error('Google sign in error', error);
-        showToast(error.message, 'error');
+        if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+            showToast('Popups were blocked. Please allow popups and try again.', 'error');
+        } else {
+            showToast(error.message || 'Google sign-in failed.', 'error');
+        }
     } finally {
         setLoading('loginBtn', false);
     }
@@ -210,15 +218,36 @@ async function signInWithGithub() {
     setLoading('loginBtn', true);
     try {
         const result = await auth.signInWithPopup(provider);
-        await saveUserToFirestore(result.user, result.user.displayName || 'GitHub User', 'github');
-        showToast('Signed in with GitHub!', 'success');
-        redirectToMembers();
+        await completeSocialSignIn(result, 'GitHub');
     } catch (error) {
         console.error('GitHub sign in error', error);
-        showToast(error.message, 'error');
+        if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+            showToast('Popups were blocked. Please allow popups and try again.', 'error');
+        } else {
+            showToast(error.message || 'GitHub sign-in failed.', 'error');
+        }
     } finally {
         setLoading('loginBtn', false);
     }
+}
+
+async function handleRedirectResult() {
+    try {
+        const result = await auth.getRedirectResult();
+        if (!result?.user) return;
+
+        const providerName = result.credential?.providerId === 'github.com' ? 'GitHub' : 'Google';
+        await completeSocialSignIn(result, providerName);
+    } catch (error) {
+        console.error('Redirect auth error', error);
+        showToast(error.message || 'Social sign-in could not be completed.', 'error');
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', handleRedirectResult);
+} else {
+    handleRedirectResult();
 }
 
 async function handleForgotPassword(e) {
